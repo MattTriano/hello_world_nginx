@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  nginx:
+    image: nginx-hw-server:0.1
+    build: 
+      context: ./server
+    ports:
+      - "80:80"
+

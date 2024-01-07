@@ -4,10 +4,11 @@ I want to securely serve things to the public internet. `nginx` is a very common
 
 ## "How do I do X" roadmap
 1. How do I serve a static "hello world"?
-2. How do I serve a site that takes input and returns an output based on the input?
-3. How do I serve https responses instead of http?
-4. How do I configure the server to only respond to specific IP addresses?
-5. ... more to be added
+2. How do I log requests received as well as info about the requester?
+3. How do I serve a site that takes input and returns an output based on the input?
+4. How do I serve https responses instead of http?
+5. How do I configure the server to only respond to specific IP addresses?
+6. ... more to be added
 
 # Things learned
 
@@ -37,4 +38,10 @@ The main context will typically include (at least?) block directives named `even
 2) Go to [http://127.0.0.1](http://127.0.0.1) (or http://whatever-your-host-ip-is, if you aren't running it on your local machine)./
 
 You'll see the static html page from `/server/index.html`.
+
+## How do I log incoming requests and requestor metadata?
+
+By default, nginx will output information to the console about requests as those requests come in. These are presented in nginx's default `log_format`, which is named `combined`. You can define other formats with other variables listed [here](https://nginx.org/en/docs/http/ngx_http_log_module.html#log_format).
+
+You can direct these logs to file by using the `access_log` directive. Using this logging scheme, you'll have to modify the docker-compose.yml file to define a volumn (mount point) for the nginx service.
 

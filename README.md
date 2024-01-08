@@ -43,5 +43,17 @@ You'll see the static html page from `/server/index.html`.
 
 By default, nginx will output information to the console about requests as those requests come in. These are presented in nginx's default `log_format`, which is named `combined`. You can define other formats with other variables listed [here](https://nginx.org/en/docs/http/ngx_http_log_module.html#log_format).
 
-You can direct these logs to file by using the `access_log` directive. Using this logging scheme, you'll have to modify the docker-compose.yml file to define a volumn (mount point) for the nginx service.
+You can direct these logs to file by using the `access_log` directive. Using this logging scheme, you'll have to modify the docker-compose.yml file to define a volumn (mount point) for the nginx service. This could get cumbersome if files become large, and it does involve tying the system to a specific location in a file system, so it may be desirable to output to console (where it will be captured by docker's logs) and configure log retention specs in the docker-compose.yml file.
+
+### Using docker to handle nginx logs
+
+You might want to define a `log_format` that outputs logs to a json compatible format (as shown in the second PR's `/server/nginx.conf` file's `http` directive block), and add `access_log` and `error_log` directives passing stdout (`/dev/stdout`) and strerr (`/dev/stderr`) to that `json` format. It's not strictly necessary to output logs in a json format, but it will make it a lot easier to extract json records later.
+
+This is enough to get nginx logs captured by Docker's logging system, but you should add a `logging` section to your service that defines the max size for a log file (e.g., `max-size: "10m"`) and the max number of log files for that service (e.g., `max-file: "5"`).
+
+Here is the command to view logs for the `docker-compose.yml` service named "server".
+
+```bash
+docker compose logs server
+```
 

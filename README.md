@@ -57,3 +57,15 @@ Here is the command to view logs for the `docker-compose.yml` service named "ser
 docker compose logs server
 ```
 
+## How do I serve a site that accepts inputs and responds
+
+There are many tools for building a web application. Python's Flask is one of the easiest, and this addition implements an app that accepts a json input then returns that input in a json formatted output.
+
+```bash
+curl -X POST http://127.0.0.1/process -H "Content-Type: application/json" -d '{"input":"Hello, World!"}'
+{"response":"Processed input: Hello, World!"}
+```
+
+On the nginx side, we'll use directives from the [proxy module](http://nginx.org/en/docs/http/ngx_http_proxy_module.html), specifically `proxy_pass` and `proxy_set_header` to configure the server to act as a reverse proxy.
+* `proxy_pass` lets you set the protocol (eg http, https, ftp, etc) and address of the proxied server.
+* `proxy_set_header` lets you define the information included in the request header. You can specify the host, the client IP address, SSL cert, host to forward to, etc. The information provided should be limited to just what the application needs.
